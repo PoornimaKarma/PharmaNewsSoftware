@@ -1,0 +1,115 @@
+package com.PharmaNews.liveNewsUpdates.Controller;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import com.PharmaNews.liveNewsUpdates.Model.Login;
+import com.PharmaNews.liveNewsUpdates.Model.RegisterModel;
+import com.PharmaNews.liveNewsUpdates.Repository.Loginrepo;
+import com.PharmaNews.liveNewsUpdates.Repository.RegisterRepository;
+import com.PharmaNews.liveNewsUpdates.Service.RegisterServic;
+import com.PharmaNews.liveNewsUpdates.Service.Service;
+
+import jakarta.servlet.http.HttpSession;
+
+@Controller
+@RequestMapping("/")
+public class LoginRegisterController {
+	
+	private static final Logger logger = LoggerFactory.getLogger(LoginRegisterController.class);
+	
+	@Autowired 
+	private RegisterServic registerServic;
+	
+	@Autowired
+	private Service service;
+	
+    @GetMapping("/")
+	public String index()
+	{	
+		return "index";
+	}
+    @GetMapping("/home")
+    public String welcome()
+    {
+    	
+    	return "home";
+    }
+    
+    @GetMapping("/Register")
+    public String register() {
+ 
+        return "Registration";  // Ensure this view exists
+    }
+    
+    @PostMapping("/Registers")
+    public String register(@ModelAttribute RegisterModel m, HttpSession session) {
+        logger.info("Received registration data: Firstname = " + m.getFirstname());
+        logger.info("Lastname = " + m.getLastname());
+        logger.info("Country = " + m.getCountry());
+        logger.info("Email = " + m.getEmail());
+        	registerServic.saveregister(m);
+        	return "redirect:/loginuser";	
+   
+		
+    }
+    @GetMapping("/loginadmin")
+	public String login( )
+	{
+      return "login";	
+	}
+    @PostMapping("/loginadmin")
+    public String loginsuccess(@ModelAttribute Login login)
+    {
+    	if ("admin".equals(login.getUsername()) && "password123".equals(login.getPassword())) {
+            return "redirect:/home";  // Redirect to home if login is successful
+        } else {
+            return "login";  // If login fails, return back to login page
+        }
+    }
+    
+//    @PostMapping("/loginuser")
+//    public String welcome(ModelMap model ,@RequestParam String username ,@RequestParam String password)
+//    {
+//    	if(username.equals("admin")&& password.equals("password123"))
+//    	{
+//    		model.put("username",username);
+//         	return "redirect:/index";
+//
+//    	}    	
+//    	else {
+//			model.put("erromsg","plz enter valid username and password");
+//			return "login";
+//		}
+//    }
+    @GetMapping("/about")
+	public String about()
+	{		
+		return "about";
+	}
+	
+	
+	@RequestMapping("/contact")
+	public String contact()
+	{
+		return "contact";	}
+	@RequestMapping("/doctors")
+	public String doctors()
+	{
+		return "doctors";
+	}
+	@RequestMapping("/treatment")
+	public String treatment()
+	{
+		return "treatment";
+	}
+	
+}
