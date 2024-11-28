@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registration Page</title>
+    <!-- Bootstrap CSS CDN -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <style>
+        body {
+            background-color: #f8f9fa;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .registration-container {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 500px;
+        }
+        .form-control:focus {
+            box-shadow: 0 0 10px rgba(0, 123, 255, 0.25);
+            border-color: #80bdff;
+        }
+        .error-message {
+            color: red;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+    <div class="registration-container">
+        <h2 class="text-center mb-4">Register</h2>
+        
+        <form id="registrationForm" th:action="@{/Registers}" method="post">
+
+            <div class="form-group">
+                <label for="firstName">First Name</label>
+                <input type="text" class="form-control "name="Firstname" id="firstName" placeholder="Enter first name" required>
+                <div class="error-message" id="firstNameError" ></div>
+            </div>
+            <div class="form-group">
+                <label for="lastName">Last Name</label>
+                <input type="text" class="form-control" name="Lastname" id="lastName" placeholder="Enter last name" required>
+                <div class="error-message" id="lastNameError"></div>
+            </div>
+            <div class="form-group">
+                <label for="country">Country</label>
+                <input type="text" class="form-control" name="Country" id="country" placeholder="Enter country" required>
+                <div class="error-message" id="countryError" ></div>
+            </div>
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" class="form-control" name="Email" id="email" placeholder="Enter email" required>
+                <div class="error-message" id="emailError" ></div>
+            </div>
+            <div class="form-group">
+                <label for="confirmEmail">Confirm Email</label>
+                <input type="email" class="form-control" name="Confirmmail" id="confirmEmail" placeholder="Confirm email" required>
+                <div class="error-message" id="confirmEmailError" name="Confirmmail"></div>
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" class="form-control" name="Password" id="password" placeholder="Enter password" required>
+                <div class="error-message" id="passwordError" ></div>
+            </div>
+            <button type="submit" class="btn btn-primary btn-block">Register</button>
+        </form>
+    </div>
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <!-- Custom JS for Validation -->
+    <script>
+    document.getElementById('registrationForm').addEventListener('submit', function(event) {
+        event.preventDefault();
+        let valid = true;
+
+        // Get form values
+        const firstName = document.getElementById('firstName').value.trim();  // Corrected
+        const lastName = document.getElementById('lastName').value.trim();    // Corrected
+        const country = document.getElementById('country').value.trim();      // Corrected
+        const email = document.getElementById('email').value.trim();          // Corrected
+        const confirmEmail = document.getElementById('confirmEmail').value.trim();  // Corrected
+        const password = document.getElementById('password').value;           // Corrected
+
+        // Clear previous error messages
+        document.querySelectorAll('.error-message').forEach(e => e.innerText = '');
+
+        // First Name Validation
+        if (firstName === '') {
+            valid = false;
+            document.getElementById('firstNameError').innerText = 'First name is required.';
+        }
+
+        // Last Name Validation
+        if (lastName === '') {
+            valid = false;
+            document.getElementById('lastNameError').innerText = 'Last name is required.';
+        }
+
+        // Country Validation
+        if (country === '') {
+            valid = false;
+            document.getElementById('countryError').innerText = 'Country is required.';
+        }
+
+        // Email Validation
+        if (email === '') {
+            valid = false;
+            document.getElementById('emailError').innerText = 'Email is required.';
+        }
+
+        // Confirm Email Validation
+        if (confirmEmail === '') {
+            valid = false;
+            document.getElementById('confirmEmailError').innerText = 'Confirm email is required.';
+        } else if (confirmEmail !== email) {
+            valid = false;
+            document.getElementById('confirmEmailError').innerText = 'Emails do not match.';
+        }
+
+        // Password Validation
+        const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+        if (password === '') {
+            valid = false;
+            document.getElementById('passwordError').innerText = 'Password is required.';
+        } else if (!passwordPattern.test(password)) {  // Corrected variable
+            valid = false;
+            document.getElementById('passwordError').innerText = 
+                'Password must be at least 8 characters, include upper & lowercase letters, a number, and a special character.';
+        }
+
+        // Submit if valid
+        if (valid) {
+            alert('Registration successful!');
+            this.submit();  // Submit the form
+        }
+    });
+
+    </script>
+</body>
+</html>
